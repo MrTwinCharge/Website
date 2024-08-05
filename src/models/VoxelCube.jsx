@@ -1,68 +1,95 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Physics, useSphere, useBox } from '@react-three/cannon';
 import * as THREE from 'three';
 
 // Vertex shader code
 const vertexShader = `
   uniform float uTime;
   varying vec3 vPosition;
-
-  // Simplex noise function
-  float noise(vec3 p) {
-    return fract(sin(dot(p, vec3(12.9898, 78.233, 0.0))) * 43758.5453);
-  }
-
   void main() {
     vPosition = position;
     vec3 pos = position;
-    float noiseValue = noise(pos * 5.0 + uTime * 0.5);
-    pos.y += sin(pos.x * 3.0 + uTime) * 0.5 + noiseValue * 0.5;
-    pos.z += cos(pos.y * 3.0 + uTime) * 0.5 + noiseValue * 0.5;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
 `;
 
 // Fragment shader code
 const fragmentShader = `
+  uniform float uTime;
   varying vec3 vPosition;
-
   void main() {
-    float intensity = (sin(vPosition.x * 3.0) + cos(vPosition.z * 3.0)) * 0.5 + 0.5;
-    gl_FragColor = vec4(0.0, 0.5, 1.0, 1.0) * intensity;
+    vec3 color = 0.5 + 0.5 * cos(uTime + vPosition.xyx + vec3(0, 2, 4));
+    gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-const VoxelCube = () => {
+const Sphere = ({ position }) => {
+  const [ref] = useSphere(() => ({ 
+    mass: 1, 
+    position,
+    args: [0.3],
+    velocity: [Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5].map(v => v * 5),
+    restitution: 0.9,
+  }));
+
   const shaderMaterial = useMemo(() => new THREE.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
     },
     vertexShader,
     fragmentShader,
-    side: THREE.DoubleSide,
-    transparent: true,
   }), []);
 
   useFrame(({ clock }) => {
     shaderMaterial.uniforms.uTime.value = clock.getElapsedTime();
   });
 
-  const gridSize = 10;
-  const cubes = [];
-  
-  for (let x = -gridSize; x < gridSize; x++) {
-    for (let y = -gridSize; y < gridSize; y++) {
-      for (let z = -gridSize; z < gridSize; z++) {
-        cubes.push(
-          <mesh key={`${x}-${y}-${z}`} position={[x, y, z]} material={shaderMaterial}>
-            <boxGeometry args={[1, 1, 1]} />
-          </mesh>
-        );
-      }
-    }
+  return (
+    <mesh ref={ref} material={shaderMaterial}>
+      <sphereGeometry args={[0.3, 32, 32]} />
+    </mesh>
+  );
+};
+
+const Boundary = () => {
+  const size = [10, 10, 10];
+  const thickness = 0.5;
+
+  useBox(() => ({ args: [size[0], thickness, size[2]], position: [0, -size[1]/2 - thickness/2, 0], type: 'Static' })); // Bottom
+  useBox(() => ({ args: [size[0], thickness, size[2]], position: [0, size[1]/2 + thickness/2, 0], type: 'Static' })); // Top
+  useBox(() => ({ args: [thickness, size[1], size[2]], position: [-size[0]/2 - thickness/2, 0, 0], type: 'Static' })); // Left
+  useBox(() => ({ args: [thickness, size[1], size[2]], position: [size[0]/2 + thickness/2, 0, 0], type: 'Static' })); // Right
+  useBox(() => ({ args: [size[0], size[1], thickness], position: [0, 0, -size[2]/2 - thickness/2], type: 'Static' })); // Front
+  useBox(() => ({ args: [size[0], size[1], thickness], position: [0, 0, size[2]/2 + thickness/2], type: 'Static' })); // Back
+
+  return (
+    <mesh>
+      <boxGeometry args={size} />
+      <meshBasicMaterial wireframe color="white" opacity={0.1} transparent />
+    </mesh>
+  );
+};
+
+const VoxelCube = () => {
+  const sphereCount = 500;
+  const spheres = [];
+
+  for (let i = 0; i < sphereCount; i++) {
+    const position = [
+      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 8
+    ];
+    spheres.push(<Sphere key={i} position={position} />);
   }
 
-  return <>{cubes}</>;
+  return (
+    <Physics gravity={[0, 0, 0]} defaultContactMaterial={{ restitution: 0.9 }}>
+      <Boundary />
+      {spheres}
+    </Physics>
+  );
 };
 
 export default VoxelCube;
