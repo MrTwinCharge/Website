@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <section className="max-container py-24 text-center">
       <h1 className="head-text">
-        Welcome to <span className="blue-gradient_text font-semibold drop-shadow">My Portfolio</span>
+        <span className="blue-gradient_text font-semibold drop-shadow">Welcome</span>
       </h1>
       <div className="mt-5 text-slate-500">
         <p>
@@ -29,14 +29,6 @@ const Home = () => {
           />
           <pointLight position={[-10, -10, -10]} intensity={0.5} />
           <VoxelCube />
-          <Plane
-            args={[10, 10]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, -1, 0]}
-            receiveShadow
-          >
-            <meshStandardMaterial attach="material" color="#e0e0e0" />
-          </Plane>
           <OrbitControls />
         </Canvas>
       </div>
