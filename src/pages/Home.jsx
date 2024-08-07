@@ -1,9 +1,10 @@
-// Home.jsx
-import React from 'react';
+// src/pages/Home.jsx
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
-import { OrbitControls, Plane, useHelper } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import VoxelCube from '../models/VoxelCube';
+import Loader from '../components/Loader';
 
 const Home = () => {
   return (
@@ -17,8 +18,8 @@ const Home = () => {
           specializing in Machine Learning and Data Science. Explore my projects and experiences.
         </p>
       </div>
-      <div className="mt-16 flex justify-center items-center h-[500px]">
-        <Canvas shadows>
+      <div className="mt-16 flex justify-center items-center" style={{ height: '80vh' }}>
+        <Canvas shadows style={{ width: '100%', height: '100%' }}>
           <ambientLight intensity={0.3} />
           <directionalLight
             position={[5, 5, 5]}
@@ -28,7 +29,9 @@ const Home = () => {
             shadow-mapSize-height={1024}
           />
           <pointLight position={[-10, -10, -10]} intensity={0.5} />
-          <VoxelCube />
+          <Suspense fallback={<Loader />}>
+            <VoxelCube />
+          </Suspense>
           <OrbitControls />
         </Canvas>
       </div>

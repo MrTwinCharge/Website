@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Physics, useSphere, useBox } from '@react-three/cannon';
 import * as THREE from 'three';
@@ -72,6 +72,7 @@ const Boundary = () => {
 };
 
 const VoxelCube = () => {
+  const groupRef = useRef();
   const sphereCount = 500;
   const spheres = [];
 
@@ -84,11 +85,19 @@ const VoxelCube = () => {
     spheres.push(<Sphere key={i} position={position} />);
   }
 
+  useFrame(({ clock }) => {
+    const elapsedTime = clock.getElapsedTime();
+    groupRef.current.rotation.x = elapsedTime * 0.1;
+    groupRef.current.rotation.y = elapsedTime * 0.1;
+  });
+
   return (
-    <Physics gravity={[0, 0, 0]} defaultContactMaterial={{ restitution: 0.9 }}>
-      <Boundary />
-      {spheres}
-    </Physics>
+    <group ref={groupRef}>
+      <Physics gravity={[0, 0, 0]} defaultContactMaterial={{ restitution: 0.9 }}>
+        <Boundary />
+        {spheres}
+      </Physics>
+    </group>
   );
 };
 
