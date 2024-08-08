@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
 import { OrbitControls } from '@react-three/drei';
-import VoxelCube from '../models/VoxelCube';
+import ParticleNebula from '../models/ParticlePhysics';
 import Loader from '../components/Loader';
 
 const Home = () => {
@@ -30,7 +30,7 @@ const Home = () => {
           />
           <pointLight position={[-10, -10, -10]} intensity={0.5} />
           <Suspense fallback={<Loader />}>
-            <VoxelCube />
+            <ParticleNebula />
           </Suspense>
           <OrbitControls />
         </Canvas>
