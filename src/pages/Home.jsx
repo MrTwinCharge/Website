@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
@@ -19,16 +18,20 @@ const Home = () => {
         </p>
       </div>
       <div className="mt-16 flex justify-center items-center" style={{ height: '80vh' }}>
-        <Canvas shadows style={{ width: '100%', height: '100%' }}>
-          <ambientLight intensity={0.3} />
+        <Canvas 
+          shadows 
+          style={{ width: '90%', height: '90%' }} 
+          camera={{ position: [0, 0, 13], fov: 60 }} // Adjusted position and field of view
+        >
+          <ambientLight intensity={2} /> {/* Increased ambient light intensity */}
           <directionalLight
-            position={[5, 5, 5]}
+            position={[10, 10, 10]}  // Adjusted position for better lighting
             intensity={1.5}
             castShadow
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
           />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} />
+          <pointLight position={[-10, -10, -10]} intensity={0.7} /> {/* Increased intensity */}
           <Suspense fallback={<Loader />}>
             <ParticleNebula />
           </Suspense>

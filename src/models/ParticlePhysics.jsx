@@ -8,19 +8,12 @@ const ParticleNebula = () => {
   const dummy = new THREE.Object3D();
   const clock = new THREE.Clock();
 
-  const { colorArray } = useMemo(() => {
-    const colorArray = new Float32Array(numCubes * 3);
-    const color = new THREE.Color();
+  // Define pastel blue color
+  const pastelBlue = new THREE.Color(0xadd8e6); // Pastel Blue
 
-    for (let i = 0; i < numCubes; i++) {
-      // Create a gradient effect
-      const t = i / numCubes;
-      color.setHSL(t * 0.6 + 0.5, 1, 0.5);
-      color.toArray(colorArray, i * 3);
-    }
-
-    return { colorArray };
-  }, []);
+  // Initialize color array
+  const colorArray = useMemo(() => new Float32Array(numCubes * 3), [numCubes]);
+  const instanceColor = useMemo(() => new THREE.InstancedBufferAttribute(colorArray, 3), [colorArray]);
 
   useFrame(() => {
     const time = clock.getElapsedTime() * 0.5;
@@ -52,18 +45,32 @@ const ParticleNebula = () => {
       
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
+
+      // Set all cubes to pastel blue
+      pastelBlue.toArray(colorArray, i * 3);
     }
 
     meshRef.current.instanceMatrix.needsUpdate = true;
+    instanceColor.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[null, null, numCubes]}>
+    <instancedMesh 
+      ref={meshRef} 
+      args={[null, null, numCubes]} 
+      castShadow
+      receiveShadow
+    >
       <boxGeometry />
-      <meshPhongMaterial vertexColors />
+      <meshStandardMaterial 
+        vertexColors
+        roughness={0.7} // Adjust roughness to interact with lighting better
+        metalness={0.1} // Adjust metalness to interact with lighting better
+      />
       <instancedBufferAttribute 
-        attach="instanceColor" 
+        attachObject={['attributes', 'instanceColor']} 
         args={[colorArray, 3]} 
+        usage={THREE.DynamicDrawUsage}
       />
     </instancedMesh>
   );
