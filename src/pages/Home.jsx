@@ -17,28 +17,28 @@ const Home = () => {
           specializing in Machine Learning and Data Science. Explore my projects and experiences.
         </p>
       </div>
-      <div className="mt-16 flex justify-center items-center" style={{ height: '80vh' }}>
+      <div className="mt-8 flex justify-center items-center" style={{ height: '80vh' }}> 
         <Canvas 
           shadows 
           style={{ width: '90%', height: '90%' }} 
-          camera={{ position: [0, 0, 13], fov: 60 }} // Adjusted position and field of view
+          camera={{ position: [0, 0, 13], fov: 60 }} 
         >
-          <ambientLight intensity={2} /> {/* Increased ambient light intensity */}
+          <ambientLight intensity={2} /> 
           <directionalLight
-            position={[10, 10, 10]}  // Adjusted position for better lighting
+            position={[10, 10, 10]}  
             intensity={1.5}
             castShadow
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
           />
-          <pointLight position={[-10, -10, -10]} intensity={0.7} /> {/* Increased intensity */}
+          <pointLight position={[-10, -10, -10]} intensity={0.7} /> 
           <Suspense fallback={<Loader />}>
             <ParticleNebula />
           </Suspense>
           <OrbitControls />
         </Canvas>
       </div>
-      <div className="mt-16">
+      <div className="mt-8"> 
         <Link to="/about" className="btn-back rounded-xl bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 transition duration-300">
           Learn More
         </Link>

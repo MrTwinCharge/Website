@@ -64,8 +64,8 @@ const ParticleNebula = () => {
       <boxGeometry />
       <meshStandardMaterial 
         vertexColors
-        roughness={0.7} // Adjust roughness to interact with lighting better
-        metalness={0.1} // Adjust metalness to interact with lighting better
+        roughness={0.7}
+        metalness={0.1} 
       />
       <instancedBufferAttribute 
         attachObject={['attributes', 'instanceColor']} 
