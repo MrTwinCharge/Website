@@ -21,7 +21,7 @@ const Home = () => {
         <Canvas 
           shadows 
           style={{ width: '90%', height: '90%' }} 
-          camera={{ position: [0, 0, 13], fov: 60 }} 
+          camera={{ position: [0, 0, 11.5], fov: 60 }} 
         >
           <ambientLight intensity={2} /> 
           <directionalLight
@@ -35,7 +35,7 @@ const Home = () => {
           <Suspense fallback={<Loader />}>
             <ParticleNebula />
           </Suspense>
-          <OrbitControls />
+          <OrbitControls enableZoom={false} />
         </Canvas>
       </div>
       <div className="mt-8"> 
