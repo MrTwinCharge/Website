@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const Contact = () => {
   return (
@@ -79,9 +79,17 @@ const Contact = () => {
             href="https://x.com/MrTwinCharge27"
             target="_blank"
             rel="noopener noreferrer"
-            className="block-container w-16 h-16 flex justify-center items-center rounded-full bg-white text-blue-400 shadow-md hover:shadow-blue-500 transition-shadow duration-300"
+            className="block-container w-16 h-16 flex justify-center items-center rounded-full bg-white shadow-md hover:shadow-blue-500 transition-shadow duration-300"
           >
-            <FaTwitter size={28} />
+            <img src="../assets/icons/X-logo.svg" alt="X Logo" className="w-10 h-10" /> {/* Use the "X" logo image */}
+          </a>
+          <a
+            href="https://github.com/MrTwinCharge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block-container w-16 h-16 flex justify-center items-center rounded-full bg-white text-gray-900 shadow-md hover:text-blue-400 hover:shadow-blue-500 transition-shadow duration-300"
+          >
+            <FaGithub size={28} />
           </a>
         </div>
       </div>
