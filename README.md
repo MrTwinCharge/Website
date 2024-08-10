@@ -1,3 +1,3 @@
-# React + Vite
+# Portfolio
 Website built on React and Vite. Uses three.js and react-fiber to display the animation on the home page, you can visit it at this URL...
-# Website
+
