@@ -13,6 +13,9 @@ const About = () => {
         <p>
           Undergraduate Computer Engineering student at The University of Texas at Austin, specializing in Machine Learning and data science.
         </p>
+        <p>
+          Interested in learning more about my background? Check out my <a href="https://drive.google.com/file/d/1Wcy7uUcMtqcAjyfMRPjMdckKSb_aWC39/view?usp=sharing" className="text-blue-500 underline">resume</a>.
+        </p>
       </div>
       <div className="py-10 flex flex-col">
         <h3 className="subhead-text">Skills</h3>
@@ -46,10 +49,10 @@ const About = () => {
           >
             <h3 className="vertical-timeline-element-title">Team Member - Aggie Data Science Club x General Motors</h3>
             <p>
-              Worked collaboratively in a team to work with General Motors on analyzing National Household Travel Survey datasets. Processed and interpreted data to gain insights related to GM’s goal for “Zero Crashes, Emissions, and Congestion”.
+              Worked collaboratively with General Motors analyzing National Household Travel Survey datasets. Processed and interpreted data to gain insights related to GM’s goal for “Zero Crashes, Emissions, and Congestion”.
             </p>
             <p className="mt-2 text-sm text-slate-500">
-              Relevant Skills: Machine Learning, Python, Python Libraries (NumPy, PyTorch, MatPlotLib), Forward and Backward Propagation, Gradient Descent, Data Processing, Feature engineering
+              Relevant Skills: Machine Learning, Python, Python Libraries (NumPy + PyTorch), Propagation, Gradient Descent, Data Processing
             </p>
           </VerticalTimelineElement>
 
@@ -59,7 +62,7 @@ const About = () => {
           >
             <h3 className="vertical-timeline-element-title">Undergraduate Research Assistant - Urban Resilience Ai Lab</h3>
             <p>
-              Conducted literature reviews and initial investigation to determine relevant wildfire occurance and severity features. Found relevant data to established features..
+              Researched different factors and features and their impacts on wildfire severity and occurrence using CBG and CT data.
             </p>
             <p className="mt-2 text-sm text-slate-500">
               Relevant Skills: Python, Python Libraries (NumPy + PyTorch)
@@ -85,7 +88,7 @@ const About = () => {
           >
             <h3 className="vertical-timeline-element-title">Intern - Ambit Private Limited</h3>
             <p>
-              As an intern I shadowed the Executive Director of IT and worked on migrating several core services to Kubernetes. Created professional presentations using PowerPoint presented to shareholders. 
+              Shadowed Executive Director of IT and worked on migrating core services to Kubernetes. Created professional presentations using PowerPoint presented to shareholders.
             </p>
             <p className="mt-2 text-sm text-slate-500">
               Relevant Skills: Kubernetes, Excel, PowerPoint, conflict-resolution
