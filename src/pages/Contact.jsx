@@ -21,15 +21,17 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://website-lake-mu-55.vercel.app/api/send', formData);
-
+      const response = await axios.post('https://your-vercel-project-url.vercel.app/api/send', formData);
+  
       if (response.status === 200) {
         setStatus('Message sent successfully!');
       }
     } catch (error) {
-      setStatus('Failed to send message.');
+      console.error('Error sending message:', error); // Log detailed error
+      setStatus(`Failed to send message. Error: ${error.response ? error.response.data.error : error.message}`); // Display error message
     }
   };
+  
 
   return (
     <section className="max-container py-24 text-center">
