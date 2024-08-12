@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { FaInstagram, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const [status, setStatus] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/send', formData);
+      if (response.status === 200) {
+        setStatus('Message sent successfully!');
+      }
+    } catch (error) {
+      setStatus('Failed to send message.');
+    }
+  };
+
   return (
     <section className="max-container py-24 text-center">
       <h1 className="head-text">
@@ -12,12 +40,7 @@ const Contact = () => {
       </div>
       <div className="py-10 flex flex-col items-center">
         <h3 className="subhead-text">Get in Touch</h3>
-        <form
-          action="mailto:your-email@example.com"
-          method="post"
-          encType="text/plain"
-          className="mt-8 flex flex-col space-y-4 w-full max-w-lg"
-        >
+        <form onSubmit={handleSubmit} className="mt-8 flex flex-col space-y-4 w-full max-w-lg">
           <label htmlFor="name" className="flex flex-col">
             <span className="text-lg font-medium mb-2">Name</span>
             <input
@@ -26,6 +49,8 @@ const Contact = () => {
               name="name"
               required
               className="p-2 border border-gray-300 rounded-lg"
+              value={formData.name}
+              onChange={handleChange} 
             />
           </label>
           <label htmlFor="email" className="flex flex-col">
@@ -36,6 +61,8 @@ const Contact = () => {
               name="email"
               required
               className="p-2 border border-gray-300 rounded-lg"
+              value={formData.email}
+              onChange={handleChange}
             />
           </label>
           <label htmlFor="message" className="flex flex-col">
@@ -46,6 +73,8 @@ const Contact = () => {
               rows="5"
               required
               className="p-2 border border-gray-300 rounded-lg"
+              value={formData.message}
+              onChange={handleChange}
             ></textarea>
           </label>
           <button
@@ -55,6 +84,7 @@ const Contact = () => {
             Send
           </button>
         </form>
+        {status && <p className="mt-4 text-lg">{status}</p>}
       </div>
       <div className="py-8 text-center">
         <h3 className="subhead-text">Follow Me</h3>
