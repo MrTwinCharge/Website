@@ -28,10 +28,24 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Error sending message:', error); // Log detailed error
-      setStatus(`Failed to send message. Error: ${error.response ? error.response.data.error : error.message}`); // Display error message
+
+      // Extract detailed error message
+      let errorMessage = 'Failed to send message.';
+
+      if (error.response) {
+        // Server responded with a status code other than 2xx
+        errorMessage += ` Server responded with status ${error.response.status}: ${error.response.data.error || error.response.statusText}`;
+      } else if (error.request) {
+        // Request was made but no response was received
+        errorMessage += ' No response received from server.';
+      } else {
+        // Error setting up the request
+        errorMessage += ` Error: ${error.message}`;
+      }
+
+      setStatus(errorMessage);
     }
   };
-  
 
   return (
     <section className="max-container py-24 text-center">
