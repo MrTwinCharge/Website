@@ -21,7 +21,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('website-lake-mu-55.vercel.app/api/send', formData);
+      const response = await axios.post('https://website-lake-mu-55.vercel.app/api/send', formData);
 
       if (response.status === 200) {
         setStatus('Message sent successfully!');
