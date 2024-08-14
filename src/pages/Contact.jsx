@@ -34,7 +34,11 @@ const Contact = () => {
 
       if (error.response) {
         // Server responded with a status code other than 2xx
-        errorMessage += ` Server responded with status ${error.response.status}: ${error.response.data.error || error.response.statusText}`;
+        errorMessage += ` Server responded with status ${error.response.status}: `;
+        // Check if the error response data is an object and stringify it
+        errorMessage += typeof error.response.data === 'object'
+          ? JSON.stringify(error.response.data)
+          : error.response.data;
       } else if (error.request) {
         // Request was made but no response was received
         errorMessage += ' No response received from server.';
