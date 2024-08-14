@@ -1,111 +1,18 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import ParticleNebula from '../models/ParticlePhysics';
+import Loader from '../components/Loader';
 import { FaInstagram, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-
-  const [status, setStatus] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('https://website-lake-mu-55.vercel.app/api/send', formData);
-  
-      if (response.status === 200) {
-        setStatus('Message sent successfully!');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error); // Log detailed error
-
-      // Extract detailed error message
-      let errorMessage = 'Failed to send message.';
-
-      if (error.response) {
-        // Server responded with a status code other than 2xx
-        errorMessage += ` Server responded with status ${error.response.status}: `;
-        // Check if the error response data is an object and stringify it
-        errorMessage += typeof error.response.data === 'object'
-          ? JSON.stringify(error.response.data)
-          : error.response.data;
-      } else if (error.request) {
-        // Request was made but no response was received
-        errorMessage += ' No response received from server.';
-      } else {
-        // Error setting up the request
-        errorMessage += ` Error: ${error.message}`;
-      }
-
-      setStatus(errorMessage);
-    }
-  };
-
   return (
     <section className="max-container py-24 text-center">
       <h1 className="head-text">
         Contact <span className="font-semibold drop-shadow">Me</span>
       </h1>
       <div className="mt-5 text-slate-500">
-        <p>If you have any questions or just want to get in touch, feel free to contact me using the form below.</p>
-      </div>
-      <div className="py-10 flex flex-col items-center">
-        <h3 className="subhead-text">Get in Touch</h3>
-        <form onSubmit={handleSubmit} className="mt-8 flex flex-col space-y-4 w-full max-w-lg">
-          <label htmlFor="name" className="flex flex-col">
-            <span className="text-lg font-medium mb-2">Name</span>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="p-2 border border-gray-300 rounded-lg"
-              value={formData.name}
-              onChange={handleChange} 
-            />
-          </label>
-          <label htmlFor="email" className="flex flex-col">
-            <span className="text-lg font-medium mb-2">Email</span>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              className="p-2 border border-gray-300 rounded-lg"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </label>
-          <label htmlFor="message" className="flex flex-col">
-            <span className="text-lg font-medium mb-2">Message</span>
-            <textarea
-              id="message"
-              name="message"
-              rows="5"
-              required
-              className="p-2 border border-gray-300 rounded-lg"
-              value={formData.message}
-              onChange={handleChange}
-            ></textarea>
-          </label>
-          <button
-            type="submit"
-            className="btn-back rounded-xl bg-blue-500 text-white py-2 px-4 hover:bg-blue-600 transition duration-300"
-          >
-            Send
-          </button>
-        </form>
-        {status && <p className="mt-4 text-lg">{status}</p>}
+        <p>If you have any questions or just want to get in touch, feel free to follow me on your preferred social media below.</p>
       </div>
       <div className="py-8 text-center">
         <h3 className="subhead-text">Follow Me</h3>
@@ -142,6 +49,29 @@ const Contact = () => {
           >
             <FaGithub size={28} />
           </a>
+        </div>
+      </div>
+      <div className="mt-8 flex justify-center">
+        <div className="w-full max-w-[800px] h-[600px]">
+          <Canvas 
+            shadows 
+            style={{ width: '100%', height: '100%' }} 
+            camera={{ position: [0, 0, 11.5], fov: 60 }} 
+          >
+            <ambientLight intensity={2} /> 
+            <directionalLight
+              position={[10, 10, 10]}  
+              intensity={1.5}
+              castShadow
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+            />
+            <pointLight position={[-10, -10, -10]} intensity={0.7} /> 
+            <Suspense fallback={<Loader />}>
+              <ParticleNebula />
+            </Suspense>
+            <OrbitControls enableZoom={false} />
+          </Canvas>
         </div>
       </div>
     </section>
