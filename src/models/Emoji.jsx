@@ -1,23 +1,34 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { a, useSpring } from '@react-spring/three';
-import * as THREE from 'three';
 
-const Emoji = () => {
+const Emoji = ({ expression }) => {
   const mouthRef = useRef();
   const leftEyeRef = useRef();
   const rightEyeRef = useRef();
-  const [expression, setExpression] = useState('smile');
 
-  const { mouthRotation, eyeScale } = useSpring({
-    mouthRotation: expression === 'smile' ? [0, 0, 0] : expression === 'sad' ? [0, 0, Math.PI] : [0, 0, Math.PI / 4],
-    eyeScale: expression === 'smile' ? [1, 1, 1] : expression === 'sad' ? [1, 0.5, 1] : [1, 1.5, 1],
+  const { mouthRotation, eyeScale, mouthScale } = useSpring({
+    mouthRotation: expression === 'smile' ? [0, 0, 0] 
+                  : expression === 'sad' ? [0, 0, Math.PI] 
+                  : expression === 'wink' ? [0, 0, Math.PI / 4] 
+                  : expression === 'ecstatic' ? [0, 0, Math.PI / 2]
+                  : [0, 0, 0],
+    eyeScale: expression === 'smile' ? [1, 1, 1] 
+             : expression === 'sad' ? [1, 0.5, 1] 
+             : expression === 'wink' ? [1, 1.5, 1] 
+             : expression === 'ecstatic' ? [1.2, 1.2, 1.2]
+             : [1, 1, 1],
+    mouthScale: expression === 'smile' ? [1, 1, 1] 
+               : expression === 'sad' ? [1, 0.5, 1] 
+               : expression === 'ecstatic' ? [1.5, 1.2, 1] 
+               : [1, 1, 1],
     config: { tension: 170, friction: 14 },
   });
 
   useFrame(() => {
     if (mouthRef.current) {
       mouthRef.current.rotation.set(...mouthRotation.get());
+      mouthRef.current.scale.set(...mouthScale.get());
     }
     if (leftEyeRef.current && rightEyeRef.current) {
       leftEyeRef.current.scale.set(...eyeScale.get());
@@ -25,36 +36,29 @@ const Emoji = () => {
     }
   });
 
-  useFrame(({ clock }) => {
-    const time = clock.getElapsedTime();
-    if (time % 6 < 2) setExpression('smile');
-    else if (time % 6 < 4) setExpression('sad');
-    else setExpression('wink');
-  });
-
   return (
     <group>
       {/* Head */}
-      <mesh>
-        <sphereGeometry args={[2, 32, 32]} />
+      <mesh castShadow receiveShadow>
+        <sphereGeometry args={[2, 64, 64]} />
         <meshStandardMaterial color="#ffeb3b" />
       </mesh>
 
       {/* Left Eye */}
-      <a.mesh ref={leftEyeRef} position={[-0.75, 1, 1.8]}>
-        <sphereGeometry args={[0.25, 16, 16]} />
+      <a.mesh ref={leftEyeRef} position={[-0.75, 1, 1.75]} castShadow>
+        <sphereGeometry args={[0.25, 32, 32]} />
         <meshStandardMaterial color="black" />
       </a.mesh>
 
       {/* Right Eye */}
-      <a.mesh ref={rightEyeRef} position={[0.75, 1, 1.8]}>
-        <sphereGeometry args={[0.25, 16, 16]} />
+      <a.mesh ref={rightEyeRef} position={[0.75, 1, 1.75]} castShadow>
+        <sphereGeometry args={[0.25, 32, 32]} />
         <meshStandardMaterial color="black" />
       </a.mesh>
 
       {/* Mouth */}
-      <a.mesh ref={mouthRef} position={[0, 0.4, 1.9]}>
-        <cylinderGeometry args={[0.5, 0.5, 0.2, 32]} />
+      <a.mesh ref={mouthRef} position={[0, 0.4, 1.75]} castShadow>
+        <cylinderGeometry args={[0.5, 0.5, 0.2, 64]} />
         <meshStandardMaterial color="black" />
       </a.mesh>
     </group>
