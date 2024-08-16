@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import ParticleNebula from '../models/ParticlePhysics';
+import Emoji from '../models/Emoji'
 import Loader from '../components/Loader';
 import { FaInstagram, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 
@@ -68,7 +68,7 @@ const Contact = () => {
             />
             <pointLight position={[-10, -10, -10]} intensity={0.7} /> 
             <Suspense fallback={<Loader />}>
-              <ParticleNebula />
+              <Emoji/>
             </Suspense>
             <OrbitControls enableZoom={false} />
           </Canvas>
