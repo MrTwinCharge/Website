@@ -13,6 +13,11 @@ const Contact = () => {
     if (emojiMood === 'sad') setEmojiMood('happy'); // Change to happy when user starts typing
   };
 
+  // Handle input blur (when user clicks away from input)
+  const handleInputBlur = () => {
+    setEmojiMood('sad'); // Revert to sad when input loses focus
+  };
+
   // Handle form submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -44,6 +49,7 @@ const Contact = () => {
                 name="name"
                 id="name"
                 onChange={handleInputChange} // Trigger emoji change on typing
+                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
@@ -55,6 +61,7 @@ const Contact = () => {
                 name="email"
                 id="email"
                 onChange={handleInputChange} // Trigger emoji change on typing
+                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
@@ -66,6 +73,7 @@ const Contact = () => {
                 id="message"
                 rows="5"
                 onChange={handleInputChange} // Trigger emoji change on typing
+                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               ></textarea>
