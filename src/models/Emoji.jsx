@@ -8,7 +8,7 @@ const Emoji = ({ expression = 'sad' }) => {
       expression === 'happy' ? [0, 0, 0] : 
       [0, 0, 0], // neutral
     mouthPosition: 
-      expression === 'happy' ? [0, -0.7, 0.1] : 
+      expression === 'happy' ? [0, -0.4, 0.1] : // Adjusted position for happy expression
       expression === 'sad' ? [0, -0.7, 0.1] : 
       [0, -0.7, 0.1], // neutral
     mouthScale: 
@@ -36,15 +36,25 @@ const Emoji = ({ expression = 'sad' }) => {
         <meshBasicMaterial color="black" />
       </mesh>
       
-      {/* Mouth (C shape) */}
-      <a.mesh 
-        rotation={mouthRotation} 
-        position={mouthPosition}
-        scale={mouthScale}
-      >
-        <ringGeometry args={[0.8, 0.9, 32, 8, Math.PI, Math.PI]} />
-        <meshBasicMaterial color="black" />
-      </a.mesh>
+      {/* Mouth */}
+      {expression === 'neutral' ? (
+        <a.mesh 
+          position={mouthPosition}
+          scale={mouthScale}
+        >
+          <boxGeometry args={[1.6, 0.5, 0.1]} /> {/* Adjust dimensions as needed */}
+          <meshBasicMaterial color="black" />
+        </a.mesh>
+      ) : (
+        <a.mesh 
+          rotation={mouthRotation} 
+          position={mouthPosition}
+          scale={mouthScale}
+        >
+          <ringGeometry args={[0.8, 0.9, 32, 8, Math.PI, Math.PI]} />
+          <meshBasicMaterial color="black" />
+        </a.mesh>
+      )}
     </group>
   );
 };
