@@ -1,65 +1,49 @@
-import React, { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React from 'react';
 import { a, useSpring } from '@react-spring/three';
 
-const Emoji = ({ expression }) => {
-  const mouthRef = useRef();
-  const leftEyeRef = useRef();
-  const rightEyeRef = useRef();
-
-  const { mouthRotation, eyeScale, mouthScale } = useSpring({
-    mouthRotation: expression === 'smile' ? [0, 0, 0] 
-                  : expression === 'sad' ? [0, 0, Math.PI] 
-                  : expression === 'wink' ? [0, 0, Math.PI / 4] 
-                  : expression === 'ecstatic' ? [0, 0, Math.PI / 2]
-                  : [0, 0, 0],
-    eyeScale: expression === 'smile' ? [1, 1, 1] 
-             : expression === 'sad' ? [1, 0.5, 1] 
-             : expression === 'wink' ? [1, 1.5, 1] 
-             : expression === 'ecstatic' ? [1.2, 1.2, 1.2]
-             : [1, 1, 1],
-    mouthScale: expression === 'smile' ? [1, 1, 1] 
-               : expression === 'sad' ? [1, 0.5, 1] 
-               : expression === 'ecstatic' ? [1.5, 1.2, 1] 
-               : [1, 1, 1],
+const Emoji = ({ expression = 'sad' }) => {
+  const { mouthRotation, mouthPosition, mouthScale } = useSpring({
+    mouthRotation: 
+      expression === 'sad' ? [0, 0, Math.PI] : 
+      expression === 'happy' ? [0, 0, 0] : 
+      [0, 0, 0], // neutral
+    mouthPosition: 
+      expression === 'happy' ? [0, -0.7, 0.1] : 
+      expression === 'sad' ? [0, -0.7, 0.1] : 
+      [0, -0.7, 0.1], // neutral
+    mouthScale: 
+      expression === 'neutral' ? [1, 0.2, 1] : [1, 1, 1],
     config: { tension: 170, friction: 14 },
-  });
-
-  useFrame(() => {
-    if (mouthRef.current) {
-      mouthRef.current.rotation.set(...mouthRotation.get());
-      mouthRef.current.scale.set(...mouthScale.get());
-    }
-    if (leftEyeRef.current && rightEyeRef.current) {
-      leftEyeRef.current.scale.set(...eyeScale.get());
-      rightEyeRef.current.scale.set(...eyeScale.get());
-    }
   });
 
   return (
     <group>
       {/* Head */}
-      <mesh castShadow receiveShadow>
-        <sphereGeometry args={[2, 64, 64]} />
-        <meshStandardMaterial color="#ffeb3b" />
+      <mesh>
+        <circleGeometry args={[2, 32]} />
+        <meshBasicMaterial color="#ffeb3b" />
       </mesh>
-
+      
       {/* Left Eye */}
-      <a.mesh ref={leftEyeRef} position={[-0.75, 1, 1.75]} castShadow>
-        <sphereGeometry args={[0.25, 32, 32]} />
-        <meshStandardMaterial color="black" />
-      </a.mesh>
-
+      <mesh position={[-0.7, 0.5, 0.1]}>
+        <circleGeometry args={[0.25, 32]} />
+        <meshBasicMaterial color="black" />
+      </mesh>
+      
       {/* Right Eye */}
-      <a.mesh ref={rightEyeRef} position={[0.75, 1, 1.75]} castShadow>
-        <sphereGeometry args={[0.25, 32, 32]} />
-        <meshStandardMaterial color="black" />
-      </a.mesh>
-
-      {/* Mouth */}
-      <a.mesh ref={mouthRef} position={[0, 0.4, 1.75]} castShadow>
-        <cylinderGeometry args={[0.5, 0.5, 0.2, 64]} />
-        <meshStandardMaterial color="black" />
+      <mesh position={[0.7, 0.5, 0.1]}>
+        <circleGeometry args={[0.25, 32]} />
+        <meshBasicMaterial color="black" />
+      </mesh>
+      
+      {/* Mouth (C shape) */}
+      <a.mesh 
+        rotation={mouthRotation} 
+        position={mouthPosition}
+        scale={mouthScale}
+      >
+        <ringGeometry args={[0.8, 0.9, 32, 8, Math.PI, Math.PI]} />
+        <meshBasicMaterial color="black" />
       </a.mesh>
     </group>
   );
