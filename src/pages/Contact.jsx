@@ -10,18 +10,13 @@ const Contact = () => {
 
   // Handle form input change
   const handleInputChange = () => {
-    if (emojiMood === 'sad') setEmojiMood('happy'); // Change to happy when user starts typing
-  };
-
-  // Handle input blur (when user clicks away from input)
-  const handleInputBlur = () => {
-    setEmojiMood('sad'); // Revert to sad when input loses focus
+    if (emojiMood !== 'neutral') setEmojiMood('neutral'); // Change to neutral when user starts typing
   };
 
   // Handle form submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    setEmojiMood('ecstatic'); // Change to ecstatic when message is sent
+    setEmojiMood('happy'); // Change to happy when message is sent
   };
 
   return (
@@ -35,7 +30,7 @@ const Contact = () => {
 
       {/* Section for Send Message Text, Contact Form, and Emoji */}
       <div className="mt-12 text-center">
-        <h3 className="subhead-text">Send Me a Message</h3>
+        <h3 className="subhead-text">Send Me a Message and</h3>
       </div>
 
       <div className="mt-4 flex justify-center items-start space-x-8">
@@ -49,7 +44,6 @@ const Contact = () => {
                 name="name"
                 id="name"
                 onChange={handleInputChange} // Trigger emoji change on typing
-                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
@@ -61,7 +55,6 @@ const Contact = () => {
                 name="email"
                 id="email"
                 onChange={handleInputChange} // Trigger emoji change on typing
-                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
@@ -73,7 +66,6 @@ const Contact = () => {
                 id="message"
                 rows="5"
                 onChange={handleInputChange} // Trigger emoji change on typing
-                onBlur={handleInputBlur} // Trigger emoji change on blur
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               ></textarea>
