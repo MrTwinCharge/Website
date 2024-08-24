@@ -4,19 +4,47 @@ import { OrbitControls } from '@react-three/drei';
 import Emoji from '../models/Emoji';
 import Loader from '../components/Loader';
 import { FaInstagram, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [emojiMood, setEmojiMood] = useState('sad'); // Initial mood is sad
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [formStatus, setFormStatus] = useState('idle');
 
   // Handle form input change
-  const handleInputChange = () => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
     if (emojiMood !== 'neutral') setEmojiMood('neutral'); // Change to neutral when user starts typing
   };
 
   // Handle form submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    setEmojiMood('happy'); // Change to happy when message is sent
+    setFormStatus('sending');
+
+    emailjs
+      .send(
+        'service_i6iqtbm', // Replace with your EmailJS service ID
+        'template_s3yqscr', // Replace with your EmailJS template ID
+        formData,
+        'your_user_id' // Replace with your EmailJS user ID
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setEmojiMood('happy'); // Change to happy when message is sent
+          setFormStatus('sent');
+        },
+        (error) => {
+          console.error(error.text);
+          setFormStatus('error');
+        }
+      );
   };
 
   return (
@@ -43,6 +71,7 @@ const Contact = () => {
                 type="text"
                 name="name"
                 id="name"
+                value={formData.name}
                 onChange={handleInputChange} // Trigger emoji change on typing
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -54,6 +83,7 @@ const Contact = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={formData.email}
                 onChange={handleInputChange} // Trigger emoji change on typing
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -65,6 +95,7 @@ const Contact = () => {
                 name="message"
                 id="message"
                 rows="5"
+                value={formData.message}
                 onChange={handleInputChange} // Trigger emoji change on typing
                 className="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -74,9 +105,16 @@ const Contact = () => {
               <button
                 type="submit"
                 className="btn-back rounded-xl bg-blue-500 text-white py-2 px-6 hover:bg-blue-600 transition duration-300"
+                disabled={formStatus === 'sending'}
               >
-                Send Message
+                {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
               </button>
+              {formStatus === 'sent' && (
+                <p className="mt-4 text-green-500">Message sent successfully!</p>
+              )}
+              {formStatus === 'error' && (
+                <p className="mt-4 text-red-500">Failed to send message. Please try again.</p>
+              )}
             </div>
           </form>
         </div>
